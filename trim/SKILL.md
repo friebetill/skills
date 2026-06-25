@@ -1,14 +1,16 @@
 ---
 name: trim
 description: >-
-  Trim anything dense — a UI surface, a module/API/config, a doc, a feature set,
-  a process — down to what actually earns its place against the one job it does.
-  Grounds every element in the goal, ranks them least-useful-first, lets the
-  human pick the cut line, then implements the cut cleanly (relocate any real
-  signal, remove orphans, verify). Invoke when the user says "trim this", "this
-  is too busy / too much / bloated", "rate these columns/filters/options/steps",
-  "what can we remove", "is this over-engineered", or shows a cluttered surface
-  and asks what's worth keeping.
+  Trim anything dense — a UI surface, a module/API/config, a doc or piece of
+  writing, a feature set, a process — down to what actually earns its place
+  against the one job it does. Grounds every element in the goal, ranks them
+  least-useful-first, lets the human pick the cut line, then implements the cut
+  cleanly (relocate any real signal, remove orphans, verify). Invoke when the
+  user says "trim this", "this is too busy / too much / bloated / wordy", "rate
+  these columns/filters/options/steps", "what can we remove", "is this
+  over-engineered", "tighten this text/draft", "what can I cut from this
+  paragraph", or shows a cluttered surface or wordy draft and asks what's worth
+  keeping.
 argument-hint: [url, file/module, or description of what to trim]
 ---
 
@@ -19,7 +21,8 @@ filters, more options, more abstraction layers, more steps, more sections. But
 space and attention are zero-sum: **every element is paid for in the focus,
 maintenance, and complexity it steals from its neighbours.** This skill is the
 algorithm for deciding what survives, whatever the surface — a UI, a chunk of
-code, an API, a config, a document, a feature set, a process.
+code, an API, a config, a document or piece of writing, a feature set, a
+process.
 
 The core test is **value against the surface's one job**: does this element help
 reach *the* goal this thing exists for? If it can't, it's cost, not value — no
@@ -38,7 +41,7 @@ matter how true, complete, or clever it is.
 5. **Implement cleanly** — relocate any real signal, remove the orphans, verify.
 
 The rest of this doc is that spine in detail, plus the kill-signals and the
-domain-specific guidance (UI / code / general).
+domain-specific guidance (UI / code / text / general).
 
 ## When to use / not use
 
@@ -92,6 +95,11 @@ identical vs. varying, what's actually reachable). Go to the source and, for
   what it's for, whether it's reachable, how many real call-sites it has.
 - **General**: each section/feature/step — what goal it serves, who consumes it,
   whether it's ever acted on.
+- **Text / prose**: work *two* granularities. First split into **paragraphs**
+  and name each paragraph's job — the one point it makes toward the document's
+  goal. Then, for each paragraph, split into **sentences** and name each
+  sentence's job. A paragraph or sentence whose job you can't name in a few
+  words — or that just repeats its neighbour's job — is a cut candidate.
 
 Fan this out to a search agent if the surface spans several files.
 
@@ -121,6 +129,16 @@ a UI form and a code/general form):
   abstraction layer with little payoff. Cost is half the ratio; weigh it
   explicitly.
 
+For **text**, the same demerits read as: *non-discriminating* = a sentence that
+restates what the paragraph already said, or a topic sentence carrying no new
+information; *empty / speculative* = throat-clearing wind-up ("In today's
+fast-paced world…", "It's worth noting that…") that delays the point;
+*redundant* = two sentences making the same point, or hedging that just repeats
+the claim; *operational / internal* = meta-commentary about the text itself ("As
+mentioned above", "In this section we'll…") and filler transitions; *high cost*
+= a qualifier / subordinate-clause pile or an adjective-adverb stack that buries
+the one point. The sentence that *states the point* is the hero.
+
 The merits that save an element: it's **on the critical path** to the goal, it
 **is the entity/core logic itself**, it's the **sort key / public API**, it
 **discriminates** (genuinely varies / is genuinely load-bearing), or it's the
@@ -145,12 +163,20 @@ Verdicts (pick one per element):
   capability.
 - **Relocate** — mostly noise but hides *one* useful bit; move that bit inline /
   to the detail page / to the right module and drop the rest.
+- **Tighten** *(text)* — the point is real but buried; keep the sentence's job,
+  cut the words around it (rewrite to fewer words) rather than dropping it whole.
 - **Keep** / **Keep (hero)**.
+
+For **text**, run the ranking at two levels: rank the **paragraphs** first and
+cut whole paragraphs that don't earn their place, then within each surviving
+paragraph rank its **sentences**. The `Element` column holds the paragraph or
+sentence — quote its first few words so the cut line is unambiguous.
 
 Always call out the **structural finding** above the table — e.g. "three of six
 dropdowns filter the same field," "rows are 110px tall because of one badge
-stack," or "this module exports 12 symbols, 8 of which have a single internal
-caller." That's the insight; the table is the evidence.
+stack," "this module exports 12 symbols, 8 of which have a single internal
+caller," or "every paragraph opens with a sentence of throat-clearing before the
+point." That's the insight; the table is the evidence.
 
 ## 5. Let the human pick the cut line
 
@@ -174,13 +200,18 @@ When the line is set:
 - **One surface per commit.** Trim the row, then the filter bar; or the module,
   then its callers — as separate commits with a *why* in the message ("identical
   on every row / single caller / duplicates field Y"), not just a *what*.
+- **For text:** after cutting, re-read the seams — fix transitions and pronoun
+  references so the shortened version still flows. A clean cut shouldn't leave a
+  jump or a dangling "this".
 
 ## 7. Verify
 
 Run the project's `typecheck`, `lint`, and `test`, plus a `grep` for the removed
 symbols to catch dangling refs. **Distinguish pre-existing failures from yours**
 (e.g. stale generated types, unrelated warnings) and say so explicitly rather
-than blaming or ignoring them.
+than blaming or ignoring them. For **text**, there's no typecheck — the check is
+reading it aloud: does the goal still land, and is every surviving sentence
+pulling its weight?
 
 ## 8. Ship
 
