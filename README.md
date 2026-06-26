@@ -13,7 +13,7 @@ skills/ directory (e.g. Codex).
 |-------|--------------|
 | [`trim`](trim/SKILL.md) | Trim anything dense — a UI, a module/API/config, a doc, a feature set — down to what earns its place. Names the one job, ranks elements least-useful-first, lets you pick the cut line, then implements the cut cleanly. |
 | [`technology`](technology/SKILL.md) | A technical sparring partner that analyzes architecture / design / testing / data-model decisions through the principles of 15 software-engineering books. Surfaces trade-offs and blind spots, then recommends. |
-| [`ux`](ux/SKILL.md) | A UX advisor grounded in the principles of 26 books on UX, design, psychology, engagement, and learning science. *(In German.)* |
+| [`ux`](ux/SKILL.md) | A UX advisor grounded in the principles of 26 books on UX, design, psychology, engagement, and learning science. |
 
 ## Install
 
